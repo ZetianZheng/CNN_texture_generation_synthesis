@@ -75,8 +75,8 @@ def tansfer(cnn, content_img, style_name, style_img, file,
 
         output, g, time = style_transfer(cnn, content_img, style_img, input_img,
         default_mean_std = False, 
-        num_steps=100, 
-        style_weight=1000000, 
+        num_steps=300, 
+        style_weight=100000, 
         content_weight=3)
         times.append(time)
 
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     # set test datasets
     txt_file = '../data/test/test.txt'
     # read content image
-    content_img = image_loader('../data/img/picasso2.jpg')
+    content_img = image_loader('../data/img/panda.jpg')
 
     mkdir('../results/scores/')
 
@@ -162,6 +162,7 @@ if __name__ == '__main__':
         os.remove('../results/scores/scores')
     # generate and compare images:
     styles, names, imgs = get_imgs_name(txt_file)
+
     for style, name, img in zip(styles, names, imgs):
         params = {
             'style': style,
@@ -169,7 +170,7 @@ if __name__ == '__main__':
             'img': img,
             'cnn': cnn,
             'content_img': content_img,
-            'img_path': '../data/dtd/images/',
+            'img_path': '../data/Textures/',
             'saving_path': '../results/',
             'num_output': 1
         }
