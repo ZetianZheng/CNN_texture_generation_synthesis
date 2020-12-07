@@ -70,20 +70,43 @@ def tansfer(cnn, content_img, style_name, style_img, file,
 
     plt.figure()
     times = []
+    losses = []
     for i in range(num_output):
         input_img = generate_input_image(noise = True, content_img=content_img)
 
-        output, g, time = style_transfer(cnn, content_img, style_img, input_img,
-        default_mean_std = False, 
-        num_steps=300, 
-        style_weight=100000, 
-        content_weight=3)
+        output, g, time, s_losses, c_losses, t_losses = \
+            style_transfer(cnn, content_img, style_img, input_img,
+                            default_mean_std = False, 
+                            num_steps=300, 
+                            style_weight=100000, 
+                            content_weight=0
+                            )
         times.append(time)
+        losses.append([s_losses, c_losses, t_losses])
 
         # save fig
         out_imgs.append(output)
         save_name = '{}_{}'.format(style_name, i + 1)
         torchvision.utils.save_image(output, file + '/{}.jpg'.format(save_name))
+        
+    losses = np.mean(np.array(losses), axis=0)
+    
+    # plt.figure()
+    # plt.plot(losses[0])
+    # plt.plot(losses[1])
+    # plt.plot(losses[2])
+    # plt.title('Model Loss - {}'.format(style_name))
+    # plt.ylabel('Loss')
+    # plt.xlabel('Step')
+    # plt.legend(['Style Loss', 'Content Loss', 'Total Loss'], loc='upper right')
+    # plt.savefig(file + '/{} losses'.format(style_name))
+
+    plt.figure()
+    plt.plot(losses[0])
+    plt.title('Model Loss - {}'.format(style_name))
+    plt.ylabel('Loss')
+    plt.xlabel('Step')
+    plt.savefig(file + '/{} losses'.format(style_name))
 
     #times = np.array(times)
     times = np.mean(times, 0)
@@ -131,7 +154,7 @@ def worker(params):
     for fname in os.listdir(g):
         if fname[-5] == '0':
             img_original = join(g, fname)
-        elif fname[-5] not in ['e', 'c'] and int(fname[-5]) > 0:
+        elif fname[-5] not in ['e', 'c', 's'] and int(fname[-5]) > 0:
             imgs_generated.append(join(g, fname))
 
     for out in imgs_generated:
@@ -172,7 +195,7 @@ if __name__ == '__main__':
             'content_img': content_img,
             'img_path': '../data/Textures/',
             'saving_path': '../results/',
-            'num_output': 1
+            'num_output': 3
         }
         worker(params)
             

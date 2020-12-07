@@ -189,7 +189,7 @@ def generate_model(pre_model, style_img, content_img,
     return model, style_losses, content_losses
 
 
-def style_transfer(model, content_img, style_img, input_img, 
+def style_transfer(model, content_img, style_img, input_img,
                    default_mean_std = True,
                    num_steps=300, style_weight=1000000, content_weight=1):
     """Run the style transfer."""
@@ -199,6 +199,8 @@ def style_transfer(model, content_img, style_img, input_img,
     #optimizer = get_input_optimizer(input_img)
     optimizer = optim.LBFGS([input_img.requires_grad_()])
     print('Optimizing..')
+
+    s_losses, c_losses, t_losses = [], [], []
     
     run = [0]
     def closure():
@@ -227,6 +229,11 @@ def style_transfer(model, content_img, style_img, input_img,
         end = time.time()
         times.append(round(end - start, 2))
 
+        if run[0] % 10 == 0:
+            s_losses.append(style_score)
+            c_losses.append(content_score)
+            t_losses.append(loss)
+        
         if run[0] % 50 == 0:
             print("run {}:".format(run))
             print('Style Loss : {:4f} Content Loss: {:4f}'.format(
@@ -239,10 +246,10 @@ def style_transfer(model, content_img, style_img, input_img,
     start = time.time()
     while run[0] <= num_steps:
         optimizer.step(closure)
-
+    
     # a last correction...
     input_img.data.clamp_(0, 1)
-    return input_img, model(input_img), times
+    return input_img, model(input_img), times, s_losses, c_losses, t_losses
 
 
 
