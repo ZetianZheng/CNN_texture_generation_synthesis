@@ -32,7 +32,7 @@ def generate_compare(cnn,imgs_pair,saving_path):
         with open(join(saving_path, 'npscores','scores'),'a+') as f:
             f.write(name + ' ' + str(loss) + '\n')
         loss = 0
-        print('data writen')
+        print('data written')
 
 
 if __name__ == '__main__':
