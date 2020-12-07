@@ -1,0 +1,15 @@
+banded/banded_0002.jpg
+banded/banded_0036.jpg
+banded/banded_0008.jpg
+blotchy/blotchy_0003.jpg
+blotchy/blotchy_0053.jpg
+blotchy/blotchy_0064.jpg
+braided/braided_0002.jpg
+braided/braided_0050.jpg
+braided/braided_0128.jpg
+bubbly/bubbly_0024.jpg
+bubbly/bubbly_0059.jpg
+bubbly/bubbly_0118.jpg
+dotted/dotted_0038.jpg
+dotted/dotted_0062.jpg
+dotted/dotted_0126.jpg
